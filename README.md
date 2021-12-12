@@ -1,2 +1,2 @@
-# Challenger-2
+# Challenge-2
 Qualified Loans
