@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Loan Qualifier Application. This is a command line application to match applicants with qualifying loans."""
 
+# Begin by importing all the necessary libraries and filters.
+
 import sys
 import fire
 import questionary
@@ -29,6 +31,10 @@ def load_bank_data():
     Returns:
     The bank data from the data rate sheet CSV file.
     """
+    # We begin by loading our program, listed below is the current path we are using. 
+
+    # The load bank data is our main file we are using to import all information in order to calculate the loan.
+    # We have an if not statement that allows the program to shut down if the correct path isnot entered.
 
     #csvpath = Path('Desktop/app.py')
     csvpath = questionary.text("What is the CSV file path?").ask()
@@ -45,11 +51,16 @@ def get_applicant_info():
     Returns the applicant's financial information.
     """
 
-    credit_score = questionary.text("What's your credit score?").ask()
-    debt = questionary.text("What's your current amount of monthly debt?").ask()
-    income = questionary.text("What's your total monthly income?").ask()
-    loan_amount = questionary.text("What's your desired loan amount?").ask()
-    home_value = questionary.text("What's your home value?").ask()
+    # Below are listed a series of questons to determine which banks will approve your loan.
+    # Provided next to each question is are sample answers used in the model.
+
+    credit_score = questionary.text("What's your credit score?").ask() # 790
+    debt = questionary.text("What's your current amount of monthly debt?").ask() # 1000
+    income = questionary.text("What's your total monthly income?").ask() # 3000
+    loan_amount = questionary.text("What's your desired loan amount?").ask() # 100000
+    home_value = questionary.text("What's your home value?").ask() # 450000
+
+    # Here we assign the intgers for our upcoming data filters.
 
     credit_score = int(credit_score)
     debt = float(debt)
@@ -107,27 +118,30 @@ def save_qualifying_loans(qualifying_loans):
     Args:
         qualifying_loans (list of lists): The qualifying bank loans.
     """
-    # @TODO: Complete the usability dialog for savings the CSV Files.
-    
-    save_csv = questionary.confirm("You are saving loans to a CSV file").ask()
-    confirm = input('Yes or No: ')
+    # This save command funtion allows the members to save the qualified data to a CSV file of their choosing.
+    # We are utilizing an if, elif, and else statement to give the saving option to ours users.
 
-    if confirm == 'Yes':
+    # In this instance we are using the file path 'Desktop/qualifying_loans.csv'.
+    
+    save_text = questionary.confirm("You are saving loans to a CSV file").ask()
+
+    if save_text == True: # Yes
         save_csv(Path('Desktop/qualifying_loans.csv'), qualifying_loans)
         print('Saved!')
     
-    elif confirm == 'No':
+    elif save_text == False: # No
         print('Not Saved')
 
-    else:
+    else: # All other responces will print an "Error" message.
        print('\n Invalid Option. Please Enter a Valid Option.')
 
-    return save_qualifying_loans(qualifying_loans)
+    return qualifying_loans
 
 
 
 def run():
     """The main function for running the script."""
+    # The run statment tells the program to run in this order of operations allowing our users to make the most of our product.
 
     # Load the latest Bank data
     bank_data = load_bank_data()
@@ -141,8 +155,7 @@ def run():
     )
 
     # Save qualifying loans
-
-    return save_qualifying_loans
+    save_qualifying_loans(qualifying_loans)
  
 if __name__ == "__main__":
     fire.Fire(run)
