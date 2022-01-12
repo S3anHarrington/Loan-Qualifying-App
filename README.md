@@ -9,7 +9,7 @@ This program utilizes python language in a modular fashion through a seriese of 
 
 ## Installation Guide
 
-* Download all documents to your Desktop, be sure to take all documents out of any folders. *
+* Download all documents to your Desktop, be sure to take all documents out of any folders. 
 
 -----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ Happy coding!
 
 ## Contributors
 
-Sean Harrington:
+Sean Harrington-
     Linkedin: www.linkedin.com/in/sean-harrington16
 
 -----------------------------------------------------------------------
