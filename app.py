@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Loan Qualifier Application.
+"""Loan Qualifier Application. This is a command line application to match applicants with qualifying loans."""
 
-This is a command line application to match applicants with qualifying loans.
-
-"""
 import sys
 import fire
 import questionary
 import csv
+import os
 from pathlib import Path
 
 
-from fileio import load_csv
+from fileio import load_csv, save_csv
 
 from calculators import (
     calculate_monthly_debt_ratio,
@@ -32,12 +30,12 @@ def load_bank_data():
     The bank data from the data rate sheet CSV file.
     """
 
-    csvpath = Path('~Desktop/daily_rate_sheet.csv')
-    csvpath = questionary.text("daily_rate_sheet.csv").ask()
-    if not csvpath():
-            sys.exit(f"Oops! Can't find this path: {'daily_rate_sheet.csv'}")
+    #csvpath = Path('Desktop/app.py')
+    csvpath = questionary.text("What is the CSV file path?").ask()
+    if not os.path.exists(csvpath):
+        sys.exit(f"Oops! Can't find this path: {csvpath}")
 
-    return load_csv(csvpath)
+    return load_bank_data
 
 
 def get_applicant_info():
@@ -109,17 +107,23 @@ def save_qualifying_loans(qualifying_loans):
     Args:
         qualifying_loans (list of lists): The qualifying bank loans.
     """
-    save_qualifying_loans(qualifying_loans)
-    qualifying_loans = Path('~Desktop/qualifying_loans.csv')
-    save_csv = questionary.text("qualifying_loans.csv").confirm()
-    if not save_csv.exists():
-            sys.exit(f"Oops! Can't find this path: {'qualifying_loans.csv'}")
+    # @TODO: Complete the usability dialog for savings the CSV Files.
     
-    return save_csv
-    return save_qualifying_loans
+    save_csv = questionary.confirm("You are saving loans to a CSV file").ask()
+    confirm = input('Yes or No: ')
 
+    if confirm == 'Yes':
+        save_csv(Path('Desktop/qualifying_loans.csv'), qualifying_loans)
+        print('Saved!')
+    
+    elif confirm == 'No':
+        print('Not Saved')
 
-# @TODO: Complete the usability dialog for savings the CSV Files.
+    else:
+       print('\n Invalid Option. Please Enter a Valid Option.')
+
+    return save_qualifying_loans(qualifying_loans)
+
 
 
 def run():
@@ -137,15 +141,8 @@ def run():
     )
 
     # Save qualifying loans
-    save_qualifying_loans(qualifying_loans)
-    qualifying_loans = Path('~Desktop/qualifying_loans.csv')
-    save_csv = questionary.text("qualifying_loans.csv").confirm()
-    if not save_csv.exists():
-            sys.exit(f"Oops! Can't find this path: {'qualifying_loans.csv'}")
-    
-    return save_csv 
 
-    return qualifying_loans(save_csv)
+    return save_qualifying_loans
  
 if __name__ == "__main__":
     fire.Fire(run)
